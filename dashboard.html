@@ -193,7 +193,7 @@
         btn.className = "filter-btn text-xs bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg border border-slate-700";
       });
       event.target.className = "filter-btn text-xs bg-accent text-brandDark font-semibold px-3 py-1.5 rounded-lg border border-accent";
-      renderTable();
+      fetchCampaigns();
     }
 
     // Wallet Integration (Ethers.js v6)
@@ -249,7 +249,23 @@
     }
 
     // Initial Load
-    renderTable();
+    fetchCampaigns();
   </script>
 </body>
 </html>
+<script>
+async function fetchCampaigns() {
+  try {
+    const res = await fetch('/api/campaigns');
+    const json = await res.json();
+    if (json.success && json.data) {
+      CAMPAIGNS_DATA.length = 0;
+      CAMPAIGNS_DATA.push(...json.data);
+      renderTable();
+    }
+  } catch (err) {
+    console.error("Failed to load API feed, fallback to local:", err);
+    renderTable();
+  }
+}
+</script>
