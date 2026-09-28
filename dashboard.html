@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Alpha Hunter Hub | Airdrop Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -28,64 +29,227 @@
     </div>
     <div class="flex items-center gap-4">
       <a href="/" class="text-sm text-slate-400 hover:text-white transition">Home</a>
-      <button class="bg-accent hover:opacity-90 text-brandDark font-bold px-4 py-2 rounded-lg text-sm transition">Connect Wallet</button>
+      <button id="walletBtn" onclick="handleWallet()" class="bg-accent hover:opacity-90 text-brandDark font-bold px-4 py-2 rounded-lg text-sm transition flex items-center gap-2">
+        <span id="walletStatusDot" class="w-2 h-2 rounded-full bg-slate-800"></span>
+        <span id="walletBtnText">Connect Wallet</span>
+      </button>
     </div>
   </header>
 
   <main class="flex-1 max-w-7xl w-full mx-auto p-6 space-y-6">
+    <!-- Wallet Context Bar (Hidden by default, shown when connected) -->
+    <div id="walletInfoBar" class="hidden bg-slate-900/80 border border-cyan-900/60 p-4 rounded-xl flex flex-wrap items-center justify-between gap-4 text-xs">
+      <div class="flex items-center gap-3">
+        <span class="text-slate-400">Address:</span>
+        <span id="fullAddress" class="font-mono text-cyan-400 bg-cyan-950/60 px-2 py-1 rounded border border-cyan-800/40"></span>
+      </div>
+      <div class="flex items-center gap-6">
+        <div><span class="text-slate-400">Balance: </span><span id="walletBalance" class="font-bold text-white">0.00 ETH</span></div>
+        <div><span class="text-slate-400">Network: </span><span id="networkName" class="font-bold text-emerald-400">Unknown</span></div>
+      </div>
+    </div>
+
+    <!-- Stats Overview -->
     <section class="grid grid-cols-2 md:grid-cols-4 gap-4">
       <div class="bg-panelDark border border-slate-800 p-4 rounded-xl">
-        <p class="text-xs text-slate-400 uppercase">Active Trackers</p>
-        <h3 class="text-2xl font-bold mt-1 text-white">12 Campaigns</h3>
+        <p class="text-xs text-slate-400 uppercase">Active Campaigns</p>
+        <h3 id="statTotal" class="text-2xl font-bold mt-1 text-white">0</h3>
       </div>
       <div class="bg-panelDark border border-slate-800 p-4 rounded-xl">
         <p class="text-xs text-slate-400 uppercase">Pending Tasks</p>
-        <h3 class="text-2xl font-bold mt-1 text-amber-400">5 Daily</h3>
+        <h3 id="statPending" class="text-2xl font-bold mt-1 text-amber-400">0</h3>
       </div>
       <div class="bg-panelDark border border-slate-800 p-4 rounded-xl">
-        <p class="text-xs text-slate-400 uppercase">Est. Potential</p>
-        <h3 class="text-2xl font-bold mt-1 text-emerald-400">~$4,850</h3>
+        <p class="text-xs text-slate-400 uppercase">Est. Portfolio Value</p>
+        <h3 id="statValue" class="text-2xl font-bold mt-1 text-emerald-400">$0</h3>
       </div>
       <div class="bg-panelDark border border-slate-800 p-4 rounded-xl">
-        <p class="text-xs text-slate-400 uppercase">Gas</p>
-        <h3 class="text-2xl font-bold mt-1 text-accent">14 Gwei</h3>
+        <p class="text-xs text-slate-400 uppercase">ETH Gas Price</p>
+        <h3 id="statGas" class="text-2xl font-bold mt-1 text-accent">-- Gwei</h3>
       </div>
     </section>
 
+    <!-- Campaigns Table -->
     <section class="bg-panelDark border border-slate-800 rounded-xl overflow-hidden">
-      <div class="p-5 border-b border-slate-800 flex justify-between items-center">
-        <h2 class="text-lg font-bold text-white">Active Campaigns</h2>
+      <div class="p-5 border-b border-slate-800 flex flex-wrap justify-between items-center gap-3">
+        <div>
+          <h2 class="text-lg font-bold text-white">Dynamic Campaigns Feed</h2>
+          <p class="text-xs text-slate-400">Automated Alpha & Testnet Radar</p>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="filterFeed('ALL')" class="filter-btn text-xs bg-accent text-brandDark font-semibold px-3 py-1.5 rounded-lg border border-accent">All</button>
+          <button onclick="filterFeed('Testnet')" class="filter-btn text-xs bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg border border-slate-700">Testnet</button>
+          <button onclick="filterFeed('Mainnet')" class="filter-btn text-xs bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg border border-slate-700">Mainnet</button>
+        </div>
       </div>
+
       <div class="overflow-x-auto">
         <table class="w-full text-left text-sm text-slate-300">
           <thead class="bg-slate-900/60 text-xs text-slate-400 uppercase border-b border-slate-800">
             <tr>
               <th class="px-6 py-3">Project</th>
-              <th class="px-6 py-3">Type</th>
+              <th class="px-6 py-3">Category</th>
               <th class="px-6 py-3">Status</th>
-              <th class="px-6 py-3">Task</th>
+              <th class="px-6 py-3">Requirement</th>
+              <th class="px-6 py-3">Score</th>
               <th class="px-6 py-3 text-right">Action</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-slate-800">
-            <tr class="hover:bg-slate-800/40">
-              <td class="px-6 py-4 font-semibold text-white">Monad Testnet</td>
-              <td class="px-6 py-4"><span class="px-2 py-0.5 text-xs rounded bg-purple-950 text-purple-300 border border-purple-800">L1</span></td>
-              <td class="px-6 py-4 text-emerald-400 text-xs font-bold">● Active</td>
-              <td class="px-6 py-4 text-xs text-slate-400">Daily Faucet & Swaps</td>
-              <td class="px-6 py-4 text-right"><a href="#" class="text-accent hover:underline text-xs">Open Guide →</a></td>
-            </tr>
-            <tr class="hover:bg-slate-800/40">
-              <td class="px-6 py-4 font-semibold text-white">Berachain V2</td>
-              <td class="px-6 py-4"><span class="px-2 py-0.5 text-xs rounded bg-amber-950 text-amber-300 border border-amber-800">EVM L1</span></td>
-              <td class="px-6 py-4 text-amber-400 text-xs font-bold">● Snapshot Soon</td>
-              <td class="px-6 py-4 text-xs text-slate-400">BGT Staking / Liquidity</td>
-              <td class="px-6 py-4 text-right"><a href="#" class="text-accent hover:underline text-xs">Open Guide →</a></td>
-            </tr>
+          <tbody id="campaignsBody" class="divide-y divide-slate-800">
+            <!-- Dynamic rows will render here -->
           </tbody>
         </table>
       </div>
     </section>
   </main>
+
+  <script>
+    // Dynamic Airdrop Data Feed Model
+    const CAMPAIGNS_DATA = [
+      {
+        id: 1,
+        project: "Monad",
+        type: "Testnet",
+        tagClass: "bg-purple-950 text-purple-300 border-purple-800",
+        status: "Active Farming",
+        statusClass: "text-emerald-400",
+        task: "Daily Faucet, Swaps & Discord Roles",
+        score: "Tier S",
+        estVal: 1500,
+        url: "#"
+      },
+      {
+        id: 2,
+        project: "Berachain V2",
+        type: "Testnet",
+        tagClass: "bg-amber-950 text-amber-300 border-amber-800",
+        status: "Final Phase",
+        statusClass: "text-amber-400",
+        task: "BGT Liquidity Farming, Kodiak DEX",
+        score: "Tier S",
+        estVal: 2000,
+        url: "#"
+      },
+      {
+        id: 3,
+        project: "Story Protocol",
+        type: "Testnet",
+        tagClass: "bg-cyan-950 text-cyan-300 border-cyan-800",
+        status: "Odyssey V2",
+        statusClass: "text-cyan-400",
+        task: "Mint IP License Badges & Test Swaps",
+        score: "Tier A",
+        estVal: 850,
+        url: "#"
+      },
+      {
+        id: 4,
+        project: "Scroll Ecosystem",
+        type: "Mainnet",
+        tagClass: "bg-orange-950 text-orange-300 border-orange-800",
+        status: "Marks Season",
+        statusClass: "text-emerald-400",
+        task: "Bridge volume, deploy smart contract",
+        score: "Tier A",
+        estVal: 500,
+        url: "#"
+      }
+    ];
+
+    let currentFilter = 'ALL';
+    let userAddress = null;
+    let provider = null;
+
+    // Render Data Feed
+    function renderTable() {
+      const tbody = document.getElementById('campaignsBody');
+      const filtered = currentFilter === 'ALL' 
+        ? CAMPAIGNS_DATA 
+        : CAMPAIGNS_DATA.filter(item => item.type === currentFilter);
+
+      tbody.innerHTML = filtered.map(item => `
+        <tr class="hover:bg-slate-800/40 transition">
+          <td class="px-6 py-4 font-semibold text-white">${item.project}</td>
+          <td class="px-6 py-4"><span class="px-2 py-0.5 text-xs rounded border ${item.tagClass}">${item.type}</span></td>
+          <td class="px-6 py-4 ${item.statusClass} text-xs font-bold">● ${item.status}</td>
+          <td class="px-6 py-4 text-xs text-slate-400">${item.task}</td>
+          <td class="px-6 py-4 text-xs font-semibold text-sky-400">${item.score}</td>
+          <td class="px-6 py-4 text-right">
+            <a href="${item.url}" class="text-accent hover:underline text-xs font-semibold">Open Guide →</a>
+          </td>
+        </tr>
+      `).join('');
+
+      // Update Top Stats dynamically
+      document.getElementById('statTotal').innerText = CAMPAIGNS_DATA.length;
+      document.getElementById('statPending').innerText = CAMPAIGNS_DATA.filter(c => c.status.includes('Active') || c.status.includes('Phase')).length;
+      const totalPotential = CAMPAIGNS_DATA.reduce((acc, curr) => acc + curr.estVal, 0);
+      document.getElementById('statValue').innerText = '$' + totalPotential.toLocaleString();
+    }
+
+    function filterFeed(type) {
+      currentFilter = type;
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.className = "filter-btn text-xs bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg border border-slate-700";
+      });
+      event.target.className = "filter-btn text-xs bg-accent text-brandDark font-semibold px-3 py-1.5 rounded-lg border border-accent";
+      renderTable();
+    }
+
+    // Wallet Integration (Ethers.js v6)
+    async function handleWallet() {
+      if (typeof window.ethereum === 'undefined') {
+        alert('Web3 wallet (MetaMask / Rabby / Phantom) not detected. Please install an extension.');
+        return;
+      }
+
+      try {
+        provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
+        userAddress = await signer.getAddress();
+        
+        const balanceWei = await provider.getBalance(userAddress);
+        const balanceEth = parseFloat(ethers.formatEther(balanceWei)).toFixed(4);
+        const network = await provider.getNetwork();
+
+        // UI Updates
+        document.getElementById('walletBtnText').innerText = `${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
+        document.getElementById('walletStatusDot').className = "w-2 h-2 rounded-full bg-emerald-400 animate-pulse";
+        document.getElementById('walletInfoBar').classList.remove('hidden');
+        document.getElementById('fullAddress').innerText = userAddress;
+        document.getElementById('walletBalance').innerText = `${balanceEth} ETH`;
+        document.getElementById('networkName').innerText = network.name.toUpperCase();
+
+        fetchGas();
+      } catch (err) {
+        console.error("Wallet connection rejected/failed:", err);
+      }
+    }
+
+    async function fetchGas() {
+      if (!provider) return;
+      try {
+        const feeData = await provider.getFeeData();
+        if (feeData.gasPrice) {
+          const gwei = parseFloat(ethers.formatUnits(feeData.gasPrice, 'gwei')).toFixed(0);
+          document.getElementById('statGas').innerText = `${gwei} Gwei`;
+        }
+      } catch (e) {
+        document.getElementById('statGas').innerText = '14 Gwei';
+      }
+    }
+
+    // Listen to account changes
+    if (window.ethereum) {
+      window.ethereum.on('accountsChanged', (accounts) => {
+        if (accounts.length > 0) handleWallet();
+        else location.reload();
+      });
+      window.ethereum.on('chainChanged', () => location.reload());
+    }
+
+    // Initial Load
+    renderTable();
+  </script>
 </body>
 </html>
