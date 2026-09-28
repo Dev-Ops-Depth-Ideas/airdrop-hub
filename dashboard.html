@@ -251,37 +251,23 @@
     // Initial Load
     fetchCampaigns();
   </script>
+    async function fetchCampaigns() {
+      try {
+        const res = await fetch('/api/campaigns');
+        const json = await res.json();
+        if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+          CAMPAIGNS_DATA = json.data;
+        }
+      } catch (err) {
+        console.error("Fetch API error:", err);
+      } finally {
+        if (typeof renderTable === 'function') renderTable();
+        if (typeof updateStats === 'function') updateStats();
+      }
+    }
+
+    // Initial Load
+    fetchCampaigns();
+  </script>
 </body>
 </html>
-<script>
-async function fetchCampaigns() {
-  try {
-    const res = await fetch('/api/campaigns');
-    const json = await res.json();
-    if (json.success && json.data) {
-      CAMPAIGNS_DATA.length = 0;
-      CAMPAIGNS_DATA.push(...json.data);
-      fetchCampaigns();
-    }
-  } catch (err) {
-    console.error("Failed to load API feed, fallback to local:", err);
-    fetchCampaigns();
-  }
-}
-</script>
-<script>
-async function fetchCampaigns() {
-  try {
-    const res = await fetch('/api/campaigns');
-    const json = await res.json();
-    if (json.success && json.data) {
-      CAMPAIGNS_DATA.length = 0;
-      CAMPAIGNS_DATA.push(...json.data);
-    }
-  } catch (err) {
-    console.error("Fetch API error:", err);
-  } finally {
-    renderTable();
-  }
-}
-</script>
