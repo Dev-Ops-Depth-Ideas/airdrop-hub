@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alpha Hunter Hub | Airdrop Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brandDark: '#0B0E14',
+            panelDark: '#151921',
+            accent: '#38BDF8',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-brandDark text-slate-100 font-sans min-h-screen flex flex-col">
+  <header class="border-b border-slate-800 bg-panelDark/80 backdrop-blur sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <span class="text-xl font-black tracking-wider text-accent">ALPHA<span class="text-white">HUNTER</span></span>
+      <span class="text-xs bg-cyan-950 text-cyan-400 border border-cyan-800 px-2 py-0.5 rounded-full font-semibold">AIRDROP HUB</span>
+    </div>
+    <div class="flex items-center gap-4">
+      <a href="/" class="text-sm text-slate-400 hover:text-white transition">Home</a>
+      <button class="bg-accent hover:opacity-90 text-brandDark font-bold px-4 py-2 rounded-lg text-sm transition">Connect Wallet</button>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto p-6 space-y-6">
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="bg-panelDark border border-slate-800 p-4 rounded-xl">
+        <p class="text-xs text-slate-400 uppercase">Active Trackers</p>
+        <h3 class="text-2xl font-bold mt-1 text-white">12 Campaigns</h3>
+      </div>
+      <div class="bg-panelDark border border-slate-800 p-4 rounded-xl">
+        <p class="text-xs text-slate-400 uppercase">Pending Tasks</p>
+        <h3 class="text-2xl font-bold mt-1 text-amber-400">5 Daily</h3>
+      </div>
+      <div class="bg-panelDark border border-slate-800 p-4 rounded-xl">
+        <p class="text-xs text-slate-400 uppercase">Est. Potential</p>
+        <h3 class="text-2xl font-bold mt-1 text-emerald-400">~$4,850</h3>
+      </div>
+      <div class="bg-panelDark border border-slate-800 p-4 rounded-xl">
+        <p class="text-xs text-slate-400 uppercase">Gas</p>
+        <h3 class="text-2xl font-bold mt-1 text-accent">14 Gwei</h3>
+      </div>
+    </section>
+
+    <section class="bg-panelDark border border-slate-800 rounded-xl overflow-hidden">
+      <div class="p-5 border-b border-slate-800 flex justify-between items-center">
+        <h2 class="text-lg font-bold text-white">Active Campaigns</h2>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm text-slate-300">
+          <thead class="bg-slate-900/60 text-xs text-slate-400 uppercase border-b border-slate-800">
+            <tr>
+              <th class="px-6 py-3">Project</th>
+              <th class="px-6 py-3">Type</th>
+              <th class="px-6 py-3">Status</th>
+              <th class="px-6 py-3">Task</th>
+              <th class="px-6 py-3 text-right">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800">
+            <tr class="hover:bg-slate-800/40">
+              <td class="px-6 py-4 font-semibold text-white">Monad Testnet</td>
+              <td class="px-6 py-4"><span class="px-2 py-0.5 text-xs rounded bg-purple-950 text-purple-300 border border-purple-800">L1</span></td>
+              <td class="px-6 py-4 text-emerald-400 text-xs font-bold">● Active</td>
+              <td class="px-6 py-4 text-xs text-slate-400">Daily Faucet & Swaps</td>
+              <td class="px-6 py-4 text-right"><a href="#" class="text-accent hover:underline text-xs">Open Guide →</a></td>
+            </tr>
+            <tr class="hover:bg-slate-800/40">
+              <td class="px-6 py-4 font-semibold text-white">Berachain V2</td>
+              <td class="px-6 py-4"><span class="px-2 py-0.5 text-xs rounded bg-amber-950 text-amber-300 border border-amber-800">EVM L1</span></td>
+              <td class="px-6 py-4 text-amber-400 text-xs font-bold">● Snapshot Soon</td>
+              <td class="px-6 py-4 text-xs text-slate-400">BGT Staking / Liquidity</td>
+              <td class="px-6 py-4 text-right"><a href="#" class="text-accent hover:underline text-xs">Open Guide →</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

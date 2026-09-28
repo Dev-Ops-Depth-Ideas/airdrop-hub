@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Airdrop Alpha & Task Hub | Zero-Cost Web3 Farming</title>
+  <meta name="description" content="Verified zero-cost crypto airdrops, testnets, and step-by-step guides. Fund your wallet with zero fees on OKX.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { background-color: #0d1117; color: #c9d1d9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    .glass-card { background: #161b22; border: 1px solid #30363d; }
+    .glass-card:hover { border-color: #a3e635; }
+    .task-done { opacity: 0.55; text-decoration: line-through; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-lime-400 selection:text-black relative">
+
+  <!-- Live Market Bar (Clean Single-Line Ticker) -->
+  <div class="bg-black border-b border-gray-800 text-[11px] py-1.5 px-3 font-mono overflow-x-auto no-scrollbar whitespace-nowrap sticky top-0 z-50">
+    <div class="max-w-4xl mx-auto flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <span class="text-lime-400 font-bold uppercase tracking-wider">OKX:</span>
+        <span id="btc-ticker" class="text-gray-300">BTC: <span class="text-lime-400 font-bold">$84,814</span></span>
+        <span id="eth-ticker" class="text-gray-300">ETH: <span class="text-lime-400 font-bold">$2,698</span></span>
+        <span id="sol-ticker" class="text-gray-300">SOL: <span class="text-lime-400 font-bold">$123.2</span></span>
+      </div>
+      <div id="eth-gas" class="text-amber-400 font-bold shrink-0">⛽ Gas: <span class="text-white">14 Gwei</span></div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <header class="border-b border-gray-800 bg-[#161b22]/95 backdrop-blur z-40">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-lime-400 animate-pulse"></span>
+        <span class="font-extrabold text-white tracking-widest text-sm uppercase">Alpha Hub</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="https://t.me/alpha_hunter_hub" target="_blank" rel="noopener noreferrer"
+           class="bg-[#229ED9]/20 hover:bg-[#229ED9]/30 text-[#229ED9] border border-[#229ED9]/40 text-xs font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
+          <i class="fa-brands fa-telegram"></i> TG Channel
+        </a>
+        <a href="https://my.okx.com/en-eu/join/43568779" target="_blank" rel="noopener noreferrer"
+           class="bg-lime-400 hover:bg-lime-300 text-black text-xs font-bold px-3 py-1.5 rounded-lg shadow-sm transition">
+          Claim €100
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main class="max-w-4xl mx-auto px-4 py-8 flex-grow space-y-8">
+    <section class="text-center space-y-3">
+      <span class="inline-flex items-center gap-1.5 bg-lime-950 text-lime-400 text-xs font-semibold px-3 py-1 rounded-full border border-lime-800/80">
+        <span class="w-1.5 h-1.5 rounded-full bg-lime-400"></span> 2026 Testnet & Points Radar
+      </span>
+      <h1 class="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
+        Zero-Cost Crypto Airdrop Engine
+      </h1>
+      <p class="text-gray-400 text-sm md:text-base max-w-xl mx-auto">
+        Curated daily testnet checkpoints, faucet links, and points strategies. Check off completed tasks to track daily farming streaks.
+      </p>
+    </section>
+
+    <!-- Essential Step: OKX Gas & Vault Card -->
+    <section class="bg-gradient-to-r from-[#161b22] to-[#1c232d] border border-lime-500/30 rounded-2xl p-5 md:p-6 shadow-xl relative overflow-hidden">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-5 relative z-10">
+        <div class="space-y-1.5">
+          <div class="flex items-center space-x-2">
+            <span class="bg-lime-400 text-black font-black text-[11px] px-2 py-0.5 rounded">STEP 0</span>
+            <h2 class="text-lg font-bold text-white">Setup Your Fast Gas & Trading Gateway</h2>
+          </div>
+          <p class="text-xs md:text-sm text-gray-300 max-w-lg">
+            Airdrop farming requires reliable gas routes (SOL, ETH, SUI). Open an OKX account with zero initial deposit fees, verified compliance, and unlock mystery reward boxes.
+          </p>
+        </div>
+        <a href="https://my.okx.com/en-eu/join/43568779" target="_blank" rel="noopener noreferrer"
+           class="inline-flex items-center justify-center bg-white hover:bg-gray-200 text-black font-extrabold text-sm px-6 py-3 rounded-xl transition shadow">
+          Create OKX Account &rarr;
+        </a>
+      </div>
+    </section>
+
+    <!-- Active Tasks Grid with LocalStorage Checklist -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-xs uppercase tracking-widest text-gray-500 font-bold">Daily Farming Checklist</h3>
+        <button onclick="resetChecklist()" class="text-xs text-gray-400 hover:text-white underline">Reset Streak</button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Berachain -->
+        <div class="glass-card rounded-xl p-5 flex flex-col justify-between space-y-4 transition" id="card-bera">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <label class="flex items-center gap-2 cursor-pointer select-none">
+                <input type="checkbox" id="task-bera" onchange="toggleTask('bera')" class="w-4 h-4 rounded text-lime-400 focus:ring-0 bg-gray-900 border-gray-700">
+                <h4 class="font-bold text-white text-base task-title">Berachain bArtio</h4>
+              </label>
+              <span class="text-[10px] bg-yellow-950 text-yellow-400 font-semibold px-2 py-0.5 rounded border border-yellow-800">Testnet</span>
+            </div>
+            <p class="text-xs text-gray-400 leading-relaxed">Proof-of-Liquidity network. Request BERA test tokens from faucet daily, provide liquidity on BEX, and mint HONEY stablecoins.</p>
+          </div>
+          <div class="pt-3 border-t border-gray-800 flex items-center justify-between text-xs w-full">
+            <span class="text-gray-500 font-mono">Cost: Free</span>
+            <a href="https://my.okx.com/en-eu/join/43568779" target="_blank" rel="noopener noreferrer" class="text-lime-400 hover:text-lime-300 font-bold">Setup Guide &rarr;</a>
+          </div>
+        </div>
+
+        <!-- Monad -->
+        <div class="glass-card rounded-xl p-5 flex flex-col justify-between space-y-4 transition" id="card-monad">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <label class="flex items-center gap-2 cursor-pointer select-none">
+                <input type="checkbox" id="task-monad" onchange="toggleTask('monad')" class="w-4 h-4 rounded text-lime-400 focus:ring-0 bg-gray-900 border-gray-700">
+                <h4 class="font-bold text-white text-base task-title">Monad Ecosystem</h4>
+              </label>
+              <span class="text-[10px] bg-purple-950 text-purple-400 font-semibold px-2 py-0.5 rounded border border-purple-800">High TPS L1</span>
+            </div>
+            <p class="text-xs text-gray-400 leading-relaxed">Parallel EVM executing 10,000 TPS. Interact with ecosystem devnets, bridge test assets, and maintain active contract streaks.</p>
+          </div>
+          <div class="pt-3 border-t border-gray-800 flex items-center justify-between text-xs w-full">
+            <span class="text-gray-500 font-mono">Cost: Free</span>
+            <a href="https://my.okx.com/en-eu/join/43568779" target="_blank" rel="noopener noreferrer" class="text-lime-400 hover:text-lime-300 font-bold">Setup Guide &rarr;</a>
+          </div>
+        </div>
+
+        <!-- Initia -->
+        <div class="glass-card rounded-xl p-5 flex flex-col justify-between space-y-4 transition" id="card-initia">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <label class="flex items-center gap-2 cursor-pointer select-none">
+                <input type="checkbox" id="task-initia" onchange="toggleTask('initia')" class="w-4 h-4 rounded text-lime-400 focus:ring-0 bg-gray-900 border-gray-700">
+                <h4 class="font-bold text-white text-base task-title">Initia Network</h4>
+              </label>
+              <span class="text-[10px] bg-blue-950 text-blue-400 font-semibold px-2 py-0.5 rounded border border-blue-800">Interwoven</span>
+            </div>
+            <p class="text-xs text-gray-400 leading-relaxed">Interwoven rollup infrastructure. Complete daily Jennie milestones, bridge between interwoven rollups, and claim testnet tier XP.</p>
+          </div>
+          <div class="pt-3 border-t border-gray-800 flex items-center justify-between text-xs w-full">
+            <span class="text-gray-500 font-mono">Cost: Free</span>
+            <a href="https://my.okx.com/en-eu/join/43568779" target="_blank" rel="noopener noreferrer" class="text-lime-400 hover:text-lime-300 font-bold">Setup Guide &rarr;</a>
+          </div>
+        </div>
+
+        <!-- SUI Ecosystem -->
+        <div class="glass-card rounded-xl p-5 flex flex-col justify-between space-y-4 transition" id="card-sui">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <label class="flex items-center gap-2 cursor-pointer select-none">
+                <input type="checkbox" id="task-sui" onchange="toggleTask('sui')" class="w-4 h-4 rounded text-lime-400 focus:ring-0 bg-gray-900 border-gray-700">
+                <h4 class="font-bold text-white text-base task-title">SUI High-Velocity DeFi</h4>
+              </label>
+              <span class="text-[10px] bg-cyan-950 text-cyan-400 font-semibold px-2 py-0.5 rounded border border-cyan-800">Mainnet Quest</span>
+            </div>
+            <p class="text-xs text-gray-400 leading-relaxed">Interact with top Move protocols, borrow/lend pools, and grid trading setups. Requires minimal SUI gas from OKX.</p>
+          </div>
+          <div class="pt-3 border-t border-gray-800 flex items-center justify-between text-xs w-full">
+            <span class="text-gray-500 font-mono">Cost: ~€1 Gas</span>
+            <a href="https://my.okx.com/en-eu/join/43568779" target="_blank" rel="noopener noreferrer" class="text-lime-400 hover:text-lime-300 font-bold">Setup Guide &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="glass-card rounded-xl p-6 space-y-4">
+      <h3 class="text-sm font-bold text-white uppercase tracking-wider">Frequently Asked Questions</h3>
+      <div class="space-y-3 text-xs md:text-sm text-gray-400">
+        <div>
+          <p class="font-semibold text-white">Do I need to deposit money to farm testnets?</p>
+          <p>No. Testnets use free faucet tokens. However, having a verified OKX wallet ready allows you to quickly withdraw small gas fees when mainnet verification is required.</p>
+        </div>
+        <div class="pt-2 border-t border-gray-800">
+          <p class="font-semibold text-white">How do rewards work?</p>
+          <p>Signing up via our OKX invite gives you eligible reward mystery boxes up to €100 upon completing standard onboarding tasks.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Floating Telegram Banner CTA -->
+  <aside class="fixed bottom-4 right-4 z-50">
+    <a href="https://t.me/alpha_hunter_hub" target="_blank" rel="noopener noreferrer"
+       class="flex items-center gap-2 bg-[#229ED9] hover:bg-[#1e8ec3] text-white text-xs font-bold px-4 py-3 rounded-full shadow-2xl transition hover:scale-105">
+      <i class="fa-brands fa-telegram text-base"></i>
+      <span>Join VIP Alpha Hub</span>
+    </a>
+  </aside>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-800 bg-[#0d1117] text-center py-6 text-xs text-gray-500 space-y-1">
+    <p>Airdrop Alpha Hub &copy; 2026. Automated Web3 Deployment.</p>
+    <p>Referral ID: <span class="text-gray-300 font-mono font-semibold">43568779</span></p>
+  </footer>
+
+  <script>
+    const TASKS = ['bera', 'monad', 'initia', 'sui'];
+
+    function loadChecklist() {
+      TASKS.forEach(t => {
+        const done = localStorage.getItem('task_' + t) === 'true';
+        const el = document.getElementById('task-' + t);
+        const card = document.getElementById('card-' + t);
+        if (el) el.checked = done;
+        if (card && done) card.querySelector('.task-title').classList.add('task-done');
+      });
+    }
+
+    function toggleTask(id) {
+      const el = document.getElementById('task-' + id);
+      const card = document.getElementById('card-' + id);
+      localStorage.setItem('task_' + id, el.checked);
+      if (el.checked) {
+        card.querySelector('.task-title').classList.add('task-done');
+      } else {
+        card.querySelector('.task-title').classList.remove('task-done');
+      }
+    }
+
+    function resetChecklist() {
+      TASKS.forEach(t => localStorage.removeItem('task_' + t));
+      loadChecklist();
+    }
+
+    async function updatePair(pair) {
+      try {
+        const res = await fetch('https://www.okx.com/api/v5/market/ticker?instId=' + pair.instId);
+        const data = await res.json();
+        if (data.data && data.data[0]) {
+          const price = parseFloat(data.data[0].last).toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 2 });
+          document.getElementById(pair.id).innerHTML = pair.instId.split('-')[0] + ': <span class="text-lime-400 font-bold">$' + price + '</span>';
+        }
+      } catch (e) {}
+    }
+
+    function fetchPrices() {
+      const pairs = [
+        { id: 'btc-ticker', instId: 'BTC-USDT' },
+        { id: 'eth-ticker', instId: 'ETH-USDT' },
+        { id: 'sol-ticker', instId: 'SOL-USDT' }
+      ];
+      pairs.forEach(p => updatePair(p));
+    }
+
+    async function fetchGas() {
+      try {
+        const res = await fetch('https://cloudflare-eth.com', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ jsonrpc: '2.0', method: 'eth_gasPrice', params: [], id: 1 })
+        });
+        const data = await res.json();
+        if (data.result) {
+          const gwei = (parseInt(data.result, 16) / 1e9).toFixed(0);
+          document.getElementById('eth-gas').innerHTML = `⛽ Gas: <span class="text-white">${gwei} Gwei</span>`;
+        }
+      } catch (e) {}
+    }
+
+    loadChecklist();
+    fetchPrices();
+    fetchGas();
+    setInterval(fetchPrices, 12000);
+    setInterval(fetchGas, 25000);
+  </script>
+</body>
+</html>
