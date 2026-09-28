@@ -26,21 +26,16 @@ let campaigns = [
 ];
 
 export default function handler(req, res) {
-  // CORS Headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+  if (req.method === 'OPTIONS') return res.status(200).end();
 
-  // GET: Επιστρέφει τα live airdrops στο dashboard
   if (req.method === 'GET') {
     return res.status(200).json({ success: true, data: campaigns });
   }
 
-  // POST: Push νέο airdrop από το Telegram bot
   if (req.method === 'POST') {
     const authHeader = req.headers['authorization'];
     const SECRET = process.env.BOT_SECRET || 'alpha_secret_key_123';
@@ -56,7 +51,6 @@ export default function handler(req, res) {
 
     newCampaign.id = Date.now();
     campaigns.unshift(newCampaign);
-
     return res.status(200).json({ success: true, added: newCampaign });
   }
 
