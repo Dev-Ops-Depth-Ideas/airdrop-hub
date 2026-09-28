@@ -261,10 +261,26 @@ async function fetchCampaigns() {
     if (json.success && json.data) {
       CAMPAIGNS_DATA.length = 0;
       CAMPAIGNS_DATA.push(...json.data);
-      renderTable();
+      fetchCampaigns();
     }
   } catch (err) {
     console.error("Failed to load API feed, fallback to local:", err);
+    fetchCampaigns();
+  }
+}
+</script>
+<script>
+async function fetchCampaigns() {
+  try {
+    const res = await fetch('/api/campaigns');
+    const json = await res.json();
+    if (json.success && json.data) {
+      CAMPAIGNS_DATA.length = 0;
+      CAMPAIGNS_DATA.push(...json.data);
+    }
+  } catch (err) {
+    console.error("Fetch API error:", err);
+  } finally {
     renderTable();
   }
 }
