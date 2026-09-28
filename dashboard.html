@@ -237,10 +237,6 @@
       } catch (e) {
         document.getElementById('statGas').innerText = '14 Gwei';
       }
-    }
-
-    // Listen to account changes
-    if (window.ethereum) {
       window.ethereum.on('accountsChanged', (accounts) => {
         if (accounts.length > 0) handleWallet();
         else location.reload();
@@ -248,9 +244,6 @@
       window.ethereum.on('chainChanged', () => location.reload());
     }
 
-    // Initial Load
-    fetchCampaigns();
-  </script>
     async function fetchCampaigns() {
       try {
         const res = await fetch('/api/campaigns');
