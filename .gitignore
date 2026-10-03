@@ -3,3 +3,7 @@
 *.db
 *.log
 __pycache__/
+.env
+hunter.log
+posted_airdrops.json
+__pycache__/
