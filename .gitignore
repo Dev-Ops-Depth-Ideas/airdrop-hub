@@ -7,3 +7,7 @@ __pycache__/
 hunter.log
 posted_airdrops.json
 __pycache__/
+.env
+hunter.log
+posted_airdrops.json
+__pycache__/
